@@ -21,6 +21,11 @@ define(['N/query', 'N/record', 'N/runtime', 'N/url'],
          */
         const beforeLoad = (scriptContext) => {
 
+            const currentUser = runtime.getCurrentUser().email;
+            const isEthos = currentUser === 'harry@alterg.com';
+
+            log.debug({title: 'Current User', details: [currentUser, isEthos]});
+
         }
 
         /**
