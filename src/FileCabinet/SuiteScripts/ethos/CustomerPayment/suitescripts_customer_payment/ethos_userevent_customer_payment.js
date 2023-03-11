@@ -79,9 +79,22 @@ define(['N/query', 'N/record', 'N/runtime', 'N/url'],
 
         const showPrintButton = (thisForm, thisObj) => {
 
+            const suiteletUrl = url.resolveScript({
+                scriptId: 'customscript_suitelet_customer_payment',
+                deploymentId: 'customdeploy_suitelet_customer_payment',
+                returnExternalUrl: false,
+                params: thisObj,
+            });
+
+            // log.debug({title: 'Suitelet Url', details: suiteletUrl});
+
+            if (!suiteletUrl)
+                return ;
+
             thisForm.addButton({
                 id: 'custpage_print_customer_payment_report',
                 label: 'Print',
+                functionName: `window.open("${suiteletUrl+'&tpl=customerdeposit'}", "_blank");`,
             });
 
         }
