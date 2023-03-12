@@ -27,11 +27,13 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             if (!scriptContext.request.method === https.Method.GET)
                 return ;
 
-            getDepositInfo(scriptContext);
+            // const paymentData = getPaymentInfo(scriptContext);
+            getPaymentInfo(scriptContext);
+
 
         }
 
-        const getDepositInfo = (scriptContext) => {
+        const getPaymentInfo = (scriptContext) => {
 
             const params = scriptContext.request.parameters;
             const recId = params.transactionId;
@@ -51,9 +53,63 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             if (!params.tpl)
                 return ;
 
-            const thisRec = record.load({id: recId, type: recType, isDynamic: true});
+            const customerPayment = record.load({id: recId, type: recType, isDynamic: true});
 
-            log.debug({title: 'Record', details: thisRec});
+            // log.debug({title: 'Record', details: thisRec});
+
+            // Getting Apply Events List Info from Netsuite //
+            const applyEventsListName = 'apply';
+            const applyEventsLineCount = customerPayment.getLineCount({sublistId: applyEventsListName});
+
+            // Getting Payment Events List Info from Netsuite //
+            const paymentEventsListName = 'paymentevent';
+            const paymentEventsLineCount = customerPayment.getLineCount({sublistId: paymentEventsListName});
+
+            // log.debug({title: 'Line Counts', details: [applyEventsLineCount, paymentEventsLineCount]});
+
+            // Getting Customer Payment Primary Info //
+            const status = customerPayment.getValue({fieldId: 'status'});
+            // const arAccount = customerPayment.getValue({fieldId: 'aracct'});
+            const arAccount = customerPayment.getText({fieldId: 'aracct'});
+            // const customer = customerPayment.getValue({fieldId: 'customer'});
+            const customer = customerPayment.getText({fieldId: 'customer'});
+            const transactionId = customerPayment.getValue({fieldId: 'tranid'});
+            const currency = customerPayment.getText({fieldId: 'currency'});
+
+            // const transactionDate = customerPayment.getValue({fieldId: 'trandate'});
+            const transactionDate = format.format({type: format.Type.DATE, value: customerPayment.getValue({fieldId: 'trandate'})});
+
+            const postingPeriod = customerPayment.getText({fieldId: 'postingperiod'});
+
+            const currentDate = new Date();
+            const printedDate = format.format({type: format.Type.DATE, value: currentDate});
+
+            const pending = customerPayment.getValue({fieldId: 'pending'});
+            const memo = customerPayment.getValue({fieldId: 'memo'});
+            // const account = customerPayment.getValue({fieldId: 'account'});
+            const account = customerPayment.getText({fieldId: 'account'});
+            const subsidiary = customerPayment.getText({fieldId: 'subsidiary'});
+            const department = customerPayment.getText({fieldId: 'department'});
+            const location = customerPayment.getText({fieldId: 'location'});
+
+            const paymentData = {
+                status,
+                arAccount,
+                customer,
+                transactionId,
+                currency,
+                transactionDate,
+                postingPeriod,
+                printedDate,
+                pending,
+                memo,
+                account,
+                subsidiary,
+                department,
+                location,
+            };
+
+            log.debug({title: 'Payment Data', details: paymentData});
 
         }
 
