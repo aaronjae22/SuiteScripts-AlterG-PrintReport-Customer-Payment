@@ -107,9 +107,57 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                 subsidiary,
                 department,
                 location,
+                applyEvents: [],
+                paymentEvents: [],
             };
 
-            log.debug({title: 'Payment Data', details: paymentData});
+            // log.debug({title: 'Payment Data', details: paymentData});
+
+            // Getting Apply Events Info //
+            for (let i = 0; i < applyEventsLineCount; i++)
+            {
+                let applyRecord = {
+                    /* applyDate: format.format({type: format.Type.DATE,
+                        value: customerPayment.getSublistValue({
+                            sublistId: paymentEventsListName,
+                            fieldId: 'applydate',
+                            line: i})}), */
+                    applyDate: customerPayment.getSublistValue({
+                       sublistId: paymentEventsListName,
+                       fieldId: 'applydate',
+                       line: i}),
+                    applyType: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'type',
+                        line: i}),
+                    applyRefNumber: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'refnum',
+                        line: i }),
+                    applyAmount: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'amount',
+                        line: i}),
+                    applyDue: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'due',
+                        line: i}),
+                    applyCurrency: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'currency',
+                        line: i}),
+                    applyPayment: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'total',
+                        line: i}),
+                }
+
+                log.debug({title: 'Apply Events', details: applyRecord});
+                paymentData.applyEvents.push(applyRecord);
+            }
+
+
+            log.debug({title: 'Payment data', details: paymentData});
 
         }
 
