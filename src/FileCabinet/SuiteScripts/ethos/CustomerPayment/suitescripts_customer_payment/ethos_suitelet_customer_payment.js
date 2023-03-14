@@ -107,21 +107,22 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                 subsidiary,
                 department,
                 location,
-                applyEvents: [],
+                // applyEvents: [],
                 paymentEvents: [],
             };
 
             // log.debug({title: 'Payment Data', details: paymentData});
 
             // Getting Apply Events Info //
+            /*
             for (let i = 0; i < applyEventsLineCount; i++)
             {
                 let applyRecord = {
-                    /* applyDate: format.format({type: format.Type.DATE,
+                    // applyDate: format.format({type: format.Type.DATE,
                         value: customerPayment.getSublistValue({
                             sublistId: paymentEventsListName,
                             fieldId: 'applydate',
-                            line: i})}), */
+                            line: i})}),
                     applyDate: customerPayment.getSublistValue({
                        sublistId: paymentEventsListName,
                        fieldId: 'applydate',
@@ -154,10 +155,61 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
 
                 log.debug({title: 'Apply Events', details: applyRecord});
                 paymentData.applyEvents.push(applyRecord);
+            } */
+
+            // log.debug({title: 'Payment data', details: paymentData});
+
+            // Getting Payment Events Info //
+            for (let i = 0; i < paymentEventsLineCount; i++)
+            {
+                let eventRecord = {
+                    transaction: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'owningtransaction',
+                        line: i}),
+                    /* transactionDate: customerDeposit.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'eventdate',
+                        line: i}),*/
+                    transactionDate: format.format({type: format.Type.DATE,
+                        value: customerPayment.getSublistValue({
+                            sublistId : paymentEventsListName,
+                            fieldId : 'eventdate',
+                            line : i})}),
+                    tranEvent: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'type',
+                        line: i}),
+                    tranHandling: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'eventtype',
+                        line: i}),
+                    paymentOption: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'card',
+                        line: i}),
+                    result: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'result',
+                        line: i}),
+                    reason: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'holdreason',
+                        line: i}),
+                    amount: customerPayment.getSublistValue({
+                        sublistId: paymentEventsListName,
+                        fieldId: 'amount',
+                        line: i})
+
+                }
+
+                // log.debug({title: 'Event Record', details: eventRecord});
+                paymentData.paymentEvents.push(eventRecord);
+
             }
 
-
-            log.debug({title: 'Payment data', details: paymentData});
+            log.debug({title: 'Payment Data', details: paymentData});
+            return paymentData;
 
         }
 
