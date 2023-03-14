@@ -223,7 +223,12 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             });
 
             renderer.templateContent = templateFile.getContents();
-            log.debug({title: 'RENDERER TEMPLATE CONTENT', details: renderer.templateContent});
+            // log.debug({title: 'RENDERER TEMPLATE CONTENT', details: renderer.templateContent});
+
+            const pdfFile = renderer.renderAsPdf();
+            // log.debug({title: 'PDF File', details: pdfFile});
+
+            return scriptContext.response.writeFile(pdfFile, true);
 
         }
 
