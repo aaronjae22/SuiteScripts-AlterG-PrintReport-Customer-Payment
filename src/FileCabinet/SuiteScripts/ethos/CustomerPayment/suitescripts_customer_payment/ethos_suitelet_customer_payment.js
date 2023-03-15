@@ -14,33 +14,30 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
          */
         const onRequest = (scriptContext) => {
 
-            // log.debug({title: 'onRequest', details: 'Suitelet'});
-
             if (!scriptContext.request.method === https.Method.GET)
                 return ;
 
-            // getPaymentInfo(scriptContext);
-            const paymentData = getPaymentInfo(scriptContext);
+            const paymentData = getPaymentRecord(scriptContext);
+
             log.debug({title: 'Payment Data', details: paymentData});
 
             return generateReport(scriptContext, paymentData);
 
-
         }
 
-        const getPaymentInfo = (scriptContext) => {
+        const getPaymentRecord = (scriptContext) => {
 
             const params = scriptContext.request.parameters;
             const recId = params.transactionId;
             const recType = params.recordType;
 
-            const scriptContextAttr = {
+            /* const scriptContextAttr = {
                 params,
                 recId,
                 recType
             };
 
-            // log.debug({title: 'Script Context', details: scriptContextAttr});
+            // log.debug({title: 'Script Context', details: scriptContextAttr}); */
 
             if (!recType || !recId)
                 return ;
@@ -50,7 +47,13 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
 
             const customerPayment = record.load({id: recId, type: recType, isDynamic: true});
 
-            // log.debug({title: 'Record', details: thisRec});
+            const paymentData = getPaymentData(scriptContext, customerPayment);
+
+            return paymentData;
+        }
+
+
+        const getPaymentData = (scriptContext, customerPayment) => {
 
             // Getting Apply Events List Info from Netsuite //
             const applyEventsListName = 'apply';
@@ -64,16 +67,12 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
 
             // Getting Customer Payment Primary Info //
             const status = customerPayment.getValue({fieldId: 'status'});
-            // const arAccount = customerPayment.getValue({fieldId: 'aracct'});
             const arAccount = customerPayment.getText({fieldId: 'aracct'});
-            // const customer = customerPayment.getValue({fieldId: 'customer'});
+            const account = customerPayment.getText({fieldId: 'account'});
             const customer = customerPayment.getText({fieldId: 'customer'});
             const transactionId = customerPayment.getValue({fieldId: 'tranid'});
             const currency = customerPayment.getText({fieldId: 'currency'});
-
-            // const transactionDate = customerPayment.getValue({fieldId: 'trandate'});
             const transactionDate = format.format({type: format.Type.DATE, value: customerPayment.getValue({fieldId: 'trandate'})});
-
             const postingPeriod = customerPayment.getText({fieldId: 'postingperiod'});
 
             const currentDate = new Date();
@@ -81,8 +80,6 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
 
             const pending = customerPayment.getValue({fieldId: 'pending'});
             const memo = customerPayment.getValue({fieldId: 'memo'});
-            // const account = customerPayment.getValue({fieldId: 'account'});
-            const account = customerPayment.getText({fieldId: 'account'});
             const subsidiary = customerPayment.getText({fieldId: 'subsidiary'});
             const department = customerPayment.getText({fieldId: 'department'});
             const location = customerPayment.getText({fieldId: 'location'});
@@ -90,6 +87,7 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             const paymentData = {
                 status,
                 arAccount,
+                account,
                 customer,
                 transactionId,
                 currency,
@@ -98,7 +96,6 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                 printedDate,
                 pending,
                 memo,
-                account,
                 subsidiary,
                 department,
                 location,
@@ -207,6 +204,8 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             return paymentData;
 
         }
+
+
 
         const generateReport = (scriptContext, paymentData) => {
 

@@ -93,7 +93,7 @@ define(['N/query', 'N/record', 'N/runtime', 'N/url'],
 
             thisForm.addButton({
                 id: 'custpage_print_customer_payment_report',
-                label: 'Print',
+                label: 'Print Test DT',
                 functionName: `window.open("${suiteletUrl+'&tpl=customerdeposit'}", "_blank");`,
             });
 
