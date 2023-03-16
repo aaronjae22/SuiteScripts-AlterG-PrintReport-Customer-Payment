@@ -69,7 +69,8 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             const status = customerPayment.getValue({fieldId: 'status'});
             const arAccount = customerPayment.getText({fieldId: 'aracct'});
             const account = customerPayment.getText({fieldId: 'account'});
-            const customer = customerPayment.getText({fieldId: 'customer'});
+            const customerName = customerPayment.getText({fieldId: 'customer'});
+            const customerId = customerPayment.getValue({fieldId: 'customer'});
             const transactionId = customerPayment.getValue({fieldId: 'tranid'});
             const currency = customerPayment.getText({fieldId: 'currency'});
             const transactionDate = format.format({type: format.Type.DATE, value: customerPayment.getValue({fieldId: 'trandate'})});
@@ -84,11 +85,19 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             const department = customerPayment.getText({fieldId: 'department'});
             const location = customerPayment.getText({fieldId: 'location'});
 
+            // Load Customer Record //
+            const customerRecord = record.load({id: customerId, type: 'customer', isDynamic: true});
+            log.debug({title: 'Customer Record', details: customerRecord});
+
+            const billTo = customerRecord.getValue({fieldId: 'defaultaddress'});
+            log.debug({title: 'Bill To', details: billTo});
+
             const paymentData = {
                 status,
                 arAccount,
                 account,
-                customer,
+                customerName,
+                customerId,
                 transactionId,
                 currency,
                 transactionDate,
@@ -99,55 +108,56 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                 subsidiary,
                 department,
                 location,
-                // applyEvents: [],
+                billTo,
+                applyEvents: [],
                 paymentEvents: [],
             };
 
             // log.debug({title: 'Payment Data', details: paymentData});
 
             // Getting Apply Events Info //
-            /*
+
             for (let i = 0; i < applyEventsLineCount; i++)
             {
                 let applyRecord = {
-                    // applyDate: format.format({type: format.Type.DATE,
+                    applyDate: format.format({type: format.Type.DATE,
                         value: customerPayment.getSublistValue({
-                            sublistId: paymentEventsListName,
+                            sublistId: applyEventsListName,
                             fieldId: 'applydate',
                             line: i})}),
-                    applyDate: customerPayment.getSublistValue({
-                       sublistId: paymentEventsListName,
+                    /*applyDate: customerPayment.getSublistValue({
+                       sublistId: applyEventsListName,
                        fieldId: 'applydate',
-                       line: i}),
+                       line: i}),*/
                     applyType: customerPayment.getSublistValue({
-                        sublistId: paymentEventsListName,
+                        sublistId: applyEventsListName,
                         fieldId: 'type',
                         line: i}),
                     applyRefNumber: customerPayment.getSublistValue({
-                        sublistId: paymentEventsListName,
+                        sublistId: applyEventsListName,
                         fieldId: 'refnum',
                         line: i }),
                     applyAmount: customerPayment.getSublistValue({
-                        sublistId: paymentEventsListName,
+                        sublistId: applyEventsListName,
                         fieldId: 'amount',
                         line: i}),
                     applyDue: customerPayment.getSublistValue({
-                        sublistId: paymentEventsListName,
+                        sublistId: applyEventsListName,
                         fieldId: 'due',
                         line: i}),
                     applyCurrency: customerPayment.getSublistValue({
-                        sublistId: paymentEventsListName,
+                        sublistId: applyEventsListName,
                         fieldId: 'currency',
                         line: i}),
                     applyPayment: customerPayment.getSublistValue({
-                        sublistId: paymentEventsListName,
+                        sublistId: applyEventsListName,
                         fieldId: 'total',
                         line: i}),
                 }
 
-                log.debug({title: 'Apply Events', details: applyRecord});
+                // log.debug({title: 'Apply Events', details: applyRecord});
                 paymentData.applyEvents.push(applyRecord);
-            } */
+            }
 
             // log.debug({title: 'Payment data', details: paymentData});
 
@@ -230,6 +240,17 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             return scriptContext.response.writeFile(pdfFile, true);
 
         }
+
+
+        /* const getShippingData = (customerId) => {
+
+            let sql = `SELECT * FROM customer WHERE id = ?`
+
+            // let sql = `SELECT defaultaddress as BillAddress FROM customer WHERE id = ?`;
+
+            return query.runSuiteQL({query: sql, params: [customerId]}).asMappedResults();
+
+        } */
 
         return {onRequest}
 

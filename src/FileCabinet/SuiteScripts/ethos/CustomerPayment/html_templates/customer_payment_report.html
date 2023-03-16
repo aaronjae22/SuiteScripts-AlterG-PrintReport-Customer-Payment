@@ -176,17 +176,14 @@
 
     <br />
 
-    <table>
+    <table style="margin-bottom: 25px;">
         <tr>
             <td  align="left" colspan="4">
                 <span style="font-weight: bold"> Bill To <br /></span>
                 <span></span>
                 <br />
-                <span>${record.billStreet}</span>
+                <span>${record.billTo}</span>
                 <br />
-                <span>${record.billCity}</span>
-                <br />
-                <span>${record.billCountry}</span>
             </td>
             <td></td>
             <td></td>
@@ -196,6 +193,7 @@
     </table>
 
 
+    <!--
     <table>
         <tr>
             <td  align="left" colspan="4">
@@ -213,6 +211,7 @@
             <td></td>
         </tr>
     </table>
+    -->
 
 
 
@@ -234,7 +233,7 @@
         <!-- PRIMARY INFORMATION TABLE VALUES -->
         <tr>
             <td colspan="3" align="left">
-                <span>${record.customer}</span>
+                <span>${record.customerName}</span>
             </td>
 
             <td colspan="2" align="left">
@@ -320,9 +319,82 @@
         </tr>
 
 
+        </#list>
+    </table>
+
+    </#if>
+
+
+    <!-- TESTING -->
+    <!-- APPLY EVENTS TABLE HEADERS -->
+    <#if record.applyEvents?has_content>
+
+    <br />
+
+    <table>
+        <tr>
+            <td align="left" colspan="4" style="font-weight: bold;">
+                Apply Events <br />
+            </td>
+        </tr>
+    </table>
+
+    <table class="itemtable" style="width: 100%; margin-top: 10px;">
+        <#list record.applyEvents as applyLine>
+        <!-- PAYMENT EVENT TABLE HEADERS -->
+        <!--
+        <thead>
+        <tr>
+            <th colspan="3" align="left">Date</th>
+            <th colspan="2">Type</th>
+            <th colspan="2">Ref Number</th>
+            <th colspan="2">Amount</th>
+            <th colspan="2">Due</th>
+            <th colspan="2">Currency</th>
+            <th colspan="2">Payment</th>
+        </tr>
+        </thead> -->
+
+        <!-- APPLY EVENT TABLE VALUES -->
+        <!--
+        <tr>
+
+            <td colspan="3" align="left">
+                <span>${applyLine.applyData}</span>
+            </td>
+
+            <td colspan="2" align="left">
+                <span>${applyLine.applyType}</span>
+            </td>
+
+            <td colspan="2" align="left">
+                <span>${applyLine.applyRefNumber}</span>
+            </td>
+
+            <td colspan="2" align="left">
+                <span>${applyLine.applyAmount}</span>
+            </td>
+
+            <td colspan="2" align="left">
+                <span>${applyLine.applyDue}</span>
+            </td>
+
+            <td colspan="2" align="left">
+                <span>${applyLine.applyCurrency}</span>
+            </td>
+
+            <td colspan="2" align="left">
+                <span>${applyLine.applyPayment}</span>
+            </td>
+
+        </tr> -->
+
+
     </#list>
     </table>
-</#if>
+
+    </#if>
+
 
 </body>
 
