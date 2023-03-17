@@ -75,6 +75,7 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             const status = customerPayment.getValue({fieldId: 'status'});
             const arAccount = customerPayment.getText({fieldId: 'aracct'});
             const account = customerPayment.getText({fieldId: 'account'});
+            // const customerName = customerPayment.getText({fieldId: 'customer'});
             const customerName = customerPayment.getText({fieldId: 'customer'});
             const customerId = customerPayment.getValue({fieldId: 'customer'});
             const transactionId = customerPayment.getValue({fieldId: 'tranid'});
