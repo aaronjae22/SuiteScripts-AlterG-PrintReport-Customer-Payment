@@ -2,6 +2,12 @@
  * @NApiVersion 2.1
  * @NScriptType Suitelet
  */
+
+/**
+ * Customer Payments: https://910658.app.netsuite.com/app/accounting/transactions/transactionlist.nl?Transaction_TYPE=CustPymt&whence=
+ * Suitelet Script Deployment: https://910658.app.netsuite.com/app/common/scripting/scriptrecord.nl?id=2976&whence=
+ */
+
 define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/runtime'],
 
     (file, format, https, query, record, render, runtime) => {
@@ -89,7 +95,8 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             const customerRecord = record.load({id: customerId, type: 'customer', isDynamic: true});
             log.debug({title: 'Customer Record', details: customerRecord});
 
-            const billTo = customerRecord.getValue({fieldId: 'defaultaddress'});
+            let billTo = customerRecord.getValue({fieldId: 'defaultaddress'}) || "";
+            billTo = billTo.replaceAll("\n", "<br/>");
             log.debug({title: 'Bill To', details: billTo});
 
             const paymentData = {
