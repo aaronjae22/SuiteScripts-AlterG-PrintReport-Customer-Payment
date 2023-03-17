@@ -8,9 +8,9 @@
  * Suitelet Script Deployment: https://910658.app.netsuite.com/app/common/scripting/scriptrecord.nl?id=2976&whence=
  */
 
-define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/runtime'],
+define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/runtime', 'N/search'],
 
-    (file, format, https, query, record, render, runtime) => {
+    (file, format, https, query, record, render, runtime, search) => {
         /**
          * Defines the Suitelet script trigger point.
          * @param {Object} scriptContext
@@ -92,12 +92,12 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             const location = customerPayment.getText({fieldId: 'location'});
 
             // Load Customer Record //
-            const customerRecord = record.load({id: customerId, type: 'customer', isDynamic: true});
-            log.debug({title: 'Customer Record', details: customerRecord});
+            /* const customerRecord = record.load({id: customerId, type: 'customer', isDynamic: true});
+            log.debug({title: 'Customer Record', details: customerRecord}); */
 
-            let billTo = customerRecord.getValue({fieldId: 'defaultaddress'}) || "";
+            /* let billTo = customerRecord.getValue({fieldId: 'defaultaddress'}) || "";
             billTo = billTo.replaceAll("\n", "<br/>");
-            log.debug({title: 'Bill To', details: billTo});
+            log.debug({title: 'Bill To', details: billTo}); */
 
             const paymentData = {
                 status,
@@ -115,7 +115,8 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                 subsidiary,
                 department,
                 location,
-                billTo,
+                // billTo,
+                // shipTo,
                 applyEvents: [],
                 paymentEvents: [],
             };
@@ -160,6 +161,10 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                         sublistId: applyEventsListName,
                         fieldId: 'total',
                         line: i}),
+                    applyCreatedFrom: customerPayment.getSublistValue({
+                        sublistId: applyEventsListName,
+                        fieldId: 'createdfrom',
+                        line: i}),
                 }
 
                 // log.debug({title: 'Apply Events', details: applyRecord});
@@ -167,6 +172,19 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             }
 
             // log.debug({title: 'Payment data', details: paymentData});
+            // log.debug({title: 'Created From', details: paymentData.applyEvents[0].applyCreatedFrom});
+            const salesOrderAddresses = getSalesOrderAddress(paymentData.applyEvents[0].applyCreatedFrom);
+            log.debug({title: 'Sales Order Addresses', details: salesOrderAddresses});
+
+            let billTo = salesOrderAddresses.billaddress;
+            let shipTo = salesOrderAddresses.shipaddress;
+
+            billTo = billTo.replaceAll("\n", "<br/>");
+            shipTo = shipTo.replaceAll("\n", "<br/>");
+
+            paymentData.billTo = billTo;
+            paymentData.shipTo = shipTo;
+
 
             // Getting Payment Events Info //
             for (let i = 0; i < paymentEventsLineCount; i++)
@@ -246,6 +264,15 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
 
             return scriptContext.response.writeFile(pdfFile, true);
 
+        }
+
+        const getSalesOrderAddress = (salesOrderId) => {
+            const addressInfo = search.lookupFields({
+                type: search.Type.SALES_ORDER,
+                id: salesOrderId,
+                columns: ['billaddress', 'shipaddress', 'tranid']});
+
+            return addressInfo;
         }
 
 
