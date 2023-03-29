@@ -100,6 +100,9 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
             billTo = billTo.replaceAll("\n", "<br/>");
             log.debug({title: 'Bill To', details: billTo}); */
 
+            const paymentMethod = customerPayment.getText({fieldId: 'paymentmethod'});
+            const creditCardNumber = customerPayment.getValue({fieldId: 'ccnumber'});
+
             const paymentData = {
                 status,
                 arAccount,
@@ -116,6 +119,8 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                 subsidiary,
                 department,
                 location,
+                paymentMethod,
+                creditCardNumber,
                 // billTo,
                 // shipTo,
                 applyEvents: [],
@@ -227,8 +232,15 @@ define(['N/file', 'N/format', 'N/https', 'N/query', 'N/record', 'N/render', 'N/r
                     amount: customerPayment.getSublistValue({
                         sublistId: paymentEventsListName,
                         fieldId: 'amount',
-                        line: i})
-
+                        line: i}),
+                    /* paymentMethod: customerPayment.getSublistValue({
+                        sublistId: applyEventsListName,
+                        fieldId: 'paymentmethod',
+                        line: i}),
+                    creditCarNumber: customerPayment.getSublistValue({
+                        sublistId: applyEventsListName,
+                        fieldId: 'ccnumber',
+                        line: i}), */
                 }
 
                 // log.debug({title: 'Event Record', details: eventRecord});

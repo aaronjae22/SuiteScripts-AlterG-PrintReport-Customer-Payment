@@ -23,7 +23,7 @@
                 <tr>
                     <td rowspan="4">
                         <#if companyInformation.logoUrl?length != 0>
-                        <img src="${companyInformation.logoUrl}" style="float: left; margin: 0px; width: 80px; height: 40px;" />
+                        <img src="${companyInformation.logoUrl}" style="float: left; margin: 0px; width: 130px; height: 70px;" />
                     </#if>
                     </td>
                     <td></td>
@@ -34,7 +34,7 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td align="right" colspan="3"><span style="font-weight: bold;">Customer Payment: &nbsp;</span></td>
+                    <td align="right" colspan="3"><span style="font-weight: bold;">Payment Receipt: &nbsp;</span></td>
                     <td align="left"><span class="number">#${record.transactionId}</span></td>
                 </tr>
                 <tr>
@@ -43,12 +43,28 @@
                     <td align="right" colspan="3"><span>Transaction Date:</span></td>
                     <td align="center" colspan="1">${record.transactionDate}</td>
                 </tr>
-                <tr>
+
+                <!-- <tr>
                     <td></td>
                     <td></td>
                     <td align="right" colspan="3"><span>Printed Date:</span></td>
                     <td align="center" colspan="1">${record.printedDate}</td>
+                </tr> -->
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right" colspan="3"><span>Payment Method: </span></td>
+                    <td align="center" colspan="1">${record.paymentMethod}</td>
                 </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right" colspan="3"><span>Credit Card #: </span></td>
+                    <td align="right" colspan="2">${record.creditCardNumber}</td>
+                </tr>
+
             </table>
         </macro>
 
@@ -147,6 +163,16 @@
         background-color: #ffffff;
         height: 1px;
     }
+
+    .addresses-table {
+        /* background: red; */
+        width: 100%
+    }
+
+    .shipAddress {
+        text-align: right;
+    }
+
     </style>
 
     </head>
@@ -159,7 +185,8 @@
     <#return comps[0]>
 
     </#function>
-    <table>
+
+    <!-- <table>
         <tr>
             <td align="left" colspan="4">
                 Subsidiary <br />
@@ -172,31 +199,37 @@
                 Location <br /> <span style="font-weight: bold">${record.location}</span>
             </td>
         </tr>
-    </table>
+    </table> -->
 
     <br />
 
-    <table style="margin-top: 18px; margin-bottom: 30px">
+    <!-- table style="margin-top: 18px; margin-bottom: 30px"> -->
+    <table class="addresses-table" style="margin-top: 22px; margin-bottom: 30px">
         <tr>
-            <td  align="left" colspan="4">
-                <span style="font-weight: bold"> Ship To <br /></span>
-                <!-- <br /> -->
-                <span>${record.shipTo}</span>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td  align="right" colspan="4"  style="margin-left: 10px">
+
+            <td class="billAddress" align="left" colspan="4"  style="margin-left: 10px">
                 <span style="font-weight: bold"> Bill To <br /></span>
                 <!-- <br /> -->
                 <span>${record.billTo}</span>
             </td>
+            <!--
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            -->
+            <td class="shipAddress" align="right" colspan="4"  style="margin-left: 10px">
+                <span style="font-weight: bold"> Ship To <br /></span>
+                <!-- <br /> -->
+                <span>${record.shipTo}</span>
+            </td>
+
+
         </tr>
     </table>
 
@@ -247,11 +280,11 @@
         <tr>
             <th colspan="3" align="left">Customer</th>
             <th colspan="2">Payment #</th>
-            <th colspan="2">Account</th>
+            <!-- <th colspan="2">Account</th> -->
             <th colspan="2">Currency</th>
             <th colspan="2">Status</th>
             <!-- <th colspan="2">Amount</th> -->
-            <th colspan="2">Posting Period</th>
+            <!-- <th colspan="2">Posting Period</th> -->
         </tr>
         </thead>
 
@@ -265,9 +298,9 @@
                 <span>${record.transactionId}</span>
             </td>
 
-            <td colspan="2" align="left">
+            <!-- <td colspan="2" align="left">
                 <span>${record.account}</span>
-            </td>
+            </td> -->
 
             <td colspan="2" align="left">
                 <span>${record.currency}</span>
@@ -277,9 +310,9 @@
                 <span>${record.status}</span>
             </td>
 
-            <td colspan="2" align="left">
+            <!-- <td colspan="2" align="left">
                 <span>${record.postingPeriod}</span>
-            </td>
+            </td> -->
 
 
         </tr>
@@ -306,7 +339,7 @@
         <tr>
             <th colspan="3" align="left">Transaction</th>
             <th colspan="2">Transaction Event</th>
-            <th colspan="2">Amount</th>
+            <!-- <th colspan="2">Amount</th> -->
             <th colspan="2">Payment Opt</th>
             <th colspan="2">Date</th>
             <th colspan="2">Result</th>
@@ -325,9 +358,9 @@
                 <span>${tranLine.tranEvent}</span>
             </td>
 
-            <td colspan="2" align="left">
+            <!-- <td colspan="2" align="left">
                 <span>${tranLine.amount}</span>
-            </td>
+            </td> -->
 
             <td colspan="2" align="left">
                 <span>${tranLine.paymentOption}</span>
