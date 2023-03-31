@@ -175,6 +175,8 @@
         text-align: right;
     }
 
+
+
     </style>
 
     </head>
@@ -468,11 +470,21 @@
 
     </#if>  -->
 
-    <!--
-    <div class="footer-text" style="background: skyblue; width: 50%; text-align: center; margin-top: 10px;">
-        <span>Testing</span>
-    </div>
-    -->
+    <!-- <br /> -->
+
+    <#if record.paymentEvents?has_content>
+
+        <div style="width: 100%; font-size: 10px; margin-top: 390px">
+            <span>If you have any questions, please reach out to us via e-mail at ar@alterg.com</span>
+        </div>
+
+    <#else>
+
+        <div style="width: 100%; font-size: 10px; margin-top: 510px">
+            <span>If you have any questions, please reach out to us via e-mail at ar@alterg.com</span>
+        </div>
+
+    </#if>
 
 </body>
 
