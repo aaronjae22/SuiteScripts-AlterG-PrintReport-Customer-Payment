@@ -19,14 +19,15 @@
     <macrolist>
 
         <macro id="nlheader">
-            <table class="header" style="width: 100%; font-size: 10pt;">
+            <table class="header-" style="width: 100%; font-size: 10px;">
                 <tr>
                     <td rowspan="4">
                         <#if companyInformation.logoUrl?length != 0>
-                        <img src="${companyInformation.logoUrl}" style="float: left; margin: 0px; width: 130px; height: 70px;" />
+                        <!-- <img src="${companyInformation.logoUrl}" style="float: left; margin: 0px; width: 130px; height: 70px;" /> -->
+                        <img src="${companyInformation.logoUrl}" style="float: left; margin: 0px; width: 60%; height: 60%;" />
                     </#if>
                     </td>
-                    <td></td>
+                    <td style="width: 250px"></td>
                     <td></td>
                     <td align="right"><span class="number">${record@title}</span></td>
                 </tr>
@@ -34,14 +35,14 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td align="right" colspan="3"><span style="font-weight: bold;">Payment Receipt: &nbsp;</span></td>
-                    <td align="left"><span class="number">#${record.transactionId}</span></td>
+                    <td align="left"><span style="font-weight: bold;">Payment Receipt: &nbsp;</span></td>
+                    <td align="right"><span class="number">#${record.transactionId}</span></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
-                    <td align="right" colspan="3"><span>Transaction Date:</span></td>
-                    <td align="center" colspan="1">${record.transactionDate}</td>
+                    <td align="left"><span>Transaction Date:</span></td>
+                    <td align="right">${record.transactionDate}</td>
                 </tr>
 
                 <!-- <tr>
@@ -54,15 +55,16 @@
                 <tr>
                     <td></td>
                     <td></td>
-                    <td align="right" colspan="3"><span>Payment Method: </span></td>
-                    <td align="center" colspan="1">${record.paymentMethod}</td>
+                    <td align="left"><span>Payment Method: </span></td>
+                    <td align="center">${record.paymentMethod}</td>
                 </tr>
 
                 <tr>
                     <td></td>
                     <td></td>
-                    <td align="right" colspan="3"><span>Credit Card #: </span></td>
-                    <td align="right" colspan="2">${record.creditCardNumber}</td>
+                    <td></td>
+                    <td align="left"><span>Credit Card #: </span></td>
+                    <td align="right">${record.creditCardNumber}</td>
                 </tr>
 
             </table>
@@ -201,13 +203,24 @@
         </tr>
     </table> -->
 
-    <br />
+    <!-- <br /> -->
+    <table>
+        <tr>
+            <!-- <td class="billAddress" align="left" colspan="4"  style="margin-right: 10px"> -->
+            <td align="left" colspan="4">
+                <span>48368 Milmont Drive</span>
+                <br />
+                <span>Fremont CA 94538</span>
+            </td>
+
+        </tr>
+    </table>
 
     <!-- table style="margin-top: 18px; margin-bottom: 30px"> -->
-    <table class="addresses-table" style="margin-top: 22px; margin-bottom: 30px">
+    <table class="addresses-table" style="margin-top: 20px; margin-bottom: 30px">
         <tr>
 
-            <td class="billAddress" align="left" colspan="4"  style="margin-left: 10px">
+            <td class="billAddress" align="left" colspan="4">
                 <span style="font-weight: bold"> Bill To <br /></span>
                 <!-- <br /> -->
                 <span>${record.billTo}</span>
@@ -455,6 +468,11 @@
 
     </#if>  -->
 
+    <!--
+    <div class="footer-text" style="background: skyblue; width: 50%; text-align: center; margin-top: 10px;">
+        <span>Testing</span>
+    </div>
+    -->
 
 </body>
 
